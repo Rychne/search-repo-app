@@ -14,16 +14,22 @@ import com.rychne.searchrepo.repository.RepoPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @HiltViewModel
 class RepoViewModel @Inject constructor(
     private val searchRepoApi: SearchRepoApi
 ) : ViewModel() {
     var pagingDataFlow: MutableState<Flow<PagingData<Repo>>?> = mutableStateOf(null)
+    val clickedRepo: MutableState<Repo?> = mutableStateOf(null)
 
     fun searchRepos(query: String) {
         pagingDataFlow.value = Pager(PagingConfig(pageSize = 30, enablePlaceholders = true)) {
             RepoPagingSource(searchRepoApi, query)
         }.flow.cachedIn(viewModelScope)
+    }
+
+    fun selectRepo(repo: Repo) {
+        clickedRepo.value = repo
     }
 }

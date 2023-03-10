@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RepoListScreen(viewModel: RepoViewModel = hiltViewModel()) {
+fun RepoListScreen(viewModel: RepoViewModel, openDetails: () -> Unit) {
 
     var query by remember { mutableStateOf("") }
     val pagingDataFlow = remember {
@@ -47,13 +47,14 @@ fun RepoListScreen(viewModel: RepoViewModel = hiltViewModel()) {
         }
 
         if (lazyPagingItems != null) {
-            RepoList(lazyPagingItems)
+            RepoList(lazyPagingItems) { repo: Repo -> viewModel.selectRepo(repo); openDetails() }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RepoList(lazyPagingItems: LazyPagingItems<Repo>) {
+fun RepoList(lazyPagingItems: LazyPagingItems<Repo>, onClicked: (Repo) -> Unit) {
 
 
     LazyColumn(contentPadding = PaddingValues(8.dp)) {
@@ -71,17 +72,22 @@ fun RepoList(lazyPagingItems: LazyPagingItems<Repo>) {
         }
 
         itemsIndexed(lazyPagingItems) { _, item ->
-            ListItem(
-                headlineText = {
-                    Text(
-                        item?.name ?: "",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
+            item?.let {
+                Card(onClick = { onClicked(it) }) {
+                    ListItem(
+                        headlineText = {
+                            Text(
+                                it.name,
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        },
+                        supportingText = { Text(it.description ?: "", fontSize = 18.sp) },
+                        trailingContent = { RepoListItemTrailingContent(repo = it) },
                     )
-                },
-                supportingText = { Text(item?.description ?: "", fontSize = 18.sp) },
-                trailingContent = { RepoListItemTrailingContent(repo = item) }
-            )
+                }
+            }
+
             Divider()
         }
 

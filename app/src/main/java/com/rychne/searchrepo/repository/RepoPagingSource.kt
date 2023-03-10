@@ -13,7 +13,6 @@ class RepoPagingSource(private val dataSource: SearchRepoApi, private val query:
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
         return try {
             val nextPageNumber = params.key ?: 1
-//            val prevPageNumber = params.key?.minus(1) ?: 1
             val response = dataSource.getRepositories(query, nextPageNumber).body()?.items ?: emptyList()
             LoadResult.Page(
                 data = response,

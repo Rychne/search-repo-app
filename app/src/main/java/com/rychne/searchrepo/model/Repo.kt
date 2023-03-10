@@ -6,8 +6,8 @@ import java.util.Date
 data class Repo(
     val owner: RepoOwner,
     val name: String,
-    val description: String,
-    val link: String,
+    val description: String?,
+    val link: String?,
     @SerializedName("stargazers_count")
     val stars: Int,
     @SerializedName("forks_count")
