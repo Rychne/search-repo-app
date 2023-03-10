@@ -13,7 +13,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.rychne.searchrepo.viewmodel.RepoViewModel
 import java.text.SimpleDateFormat
@@ -69,7 +68,10 @@ fun RepoDetailsScreen(viewModel: RepoViewModel) {
             Text(text = it.link ?: "", fontSize = 12.sp)
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "Created at ${SimpleDateFormat.getDateTimeInstance().format(it.createdAt)}", fontSize = 12.sp)
+            Text(
+                text = "Created at ${SimpleDateFormat.getDateTimeInstance().format(it.createdAt)}",
+                fontSize = 12.sp
+            )
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
