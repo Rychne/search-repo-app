@@ -27,22 +27,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SearchRepoAppTheme {
+                val viewModel: RepoViewModel = hiltViewModel()
+                val navController = rememberNavController()
+
                 Scaffold(
                     topBar = {
                         TopAppBar(
                             title = { Text("Search Repo App") },
                             navigationIcon = {
-                                IconButton(onClick = {}) {
-                                    Icon(Icons.Filled.ArrowBack, "backIcon")
+                                if (viewModel.clickedRepo.value != null ) {
+                                    IconButton(onClick = {viewModel.clickedRepo.value = null; navController.popBackStack()}) {
+                                        Icon(Icons.Filled.ArrowBack, "backIcon")
+                                    }
                                 }
                             },
                         )
                     }
                 ) { contentPadding ->
-                    val navController = rememberNavController()
-
-                    val viewModel: RepoViewModel = hiltViewModel()
-
 
                     Box(modifier = Modifier.padding(contentPadding)) {
                         NavHost(navController = navController, startDestination = "repolist") {
